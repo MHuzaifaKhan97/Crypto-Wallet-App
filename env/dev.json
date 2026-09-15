@@ -1,0 +1,4 @@
+{
+  "WALLET_BASE_URL": "https://api.crypto-trading-app.example.com/v1",
+  "AUTH_BASE_URL": "https://api.crypto-trading-app.example.com/v1"
+}
