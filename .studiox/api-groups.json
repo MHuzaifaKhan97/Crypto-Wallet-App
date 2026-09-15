@@ -1,0 +1,285 @@
+[
+  {
+    "groupId": "wallet",
+    "name": "Wallet",
+    "baseUrl": "https://api.crypto-trading-app.example.com/v1",
+    "authType": "bearer",
+    "authConfig": {
+      "tokenField": "authToken"
+    },
+    "endpoints": [
+      {
+        "id": "buy",
+        "name": "Buy coin",
+        "method": "POST",
+        "path": "/orders/buy",
+        "requestBody": {
+          "coinId": "{{coinId}}",
+          "amount": "{{amount}}"
+        },
+        "responseExample": {
+          "success": true,
+          "data": {
+            "orderId": "ord_1",
+            "status": "filled"
+          }
+        }
+      },
+      {
+        "id": "sell",
+        "name": "Sell coin",
+        "method": "POST",
+        "path": "/orders/sell",
+        "requestBody": {
+          "coinId": "{{coinId}}",
+          "amount": "{{amount}}"
+        },
+        "responseExample": {
+          "success": true,
+          "data": {
+            "orderId": "ord_1",
+            "status": "filled"
+          }
+        }
+      },
+      {
+        "id": "deposit",
+        "name": "Deposit funds",
+        "method": "POST",
+        "path": "/wallet/deposit",
+        "requestBody": {
+          "amount": "{{amount}}"
+        },
+        "responseExample": {
+          "success": true,
+          "data": {
+            "newBalance": 4098.75
+          }
+        },
+        "responseFields": [
+          "newBalance"
+        ],
+        "responseWorkflow": [
+          {
+            "kind": "setMappedField",
+            "field": "newBalance",
+            "valueExpr": "response.data.newBalance"
+          }
+        ]
+      },
+      {
+        "id": "withdraw",
+        "name": "Withdraw funds",
+        "method": "POST",
+        "path": "/wallet/withdraw",
+        "requestBody": {
+          "amount": "{{amount}}"
+        },
+        "responseExample": {
+          "success": true,
+          "data": {
+            "newBalance": 920.75
+          }
+        },
+        "responseFields": [
+          "newBalance"
+        ],
+        "responseWorkflow": [
+          {
+            "kind": "setMappedField",
+            "field": "newBalance",
+            "valueExpr": "response.data.newBalance"
+          }
+        ]
+      },
+      {
+        "id": "send",
+        "name": "Send crypto",
+        "method": "POST",
+        "path": "/wallet/send",
+        "requestBody": {
+          "coinId": "{{coinId}}",
+          "address": "{{address}}",
+          "amount": "{{amount}}",
+          "note": "{{note}}"
+        },
+        "responseExample": {
+          "success": true,
+          "data": {
+            "txId": "tx_1"
+          }
+        }
+      },
+      {
+        "id": "get-receive-address",
+        "name": "Get receive address",
+        "method": "GET",
+        "path": "/wallet/receive-address",
+        "queryParams": {
+          "coinId": "{{coinId}}"
+        },
+        "requestBody": null,
+        "responseExample": {
+          "success": true,
+          "data": {
+            "address": "34HuwzDnSwxVRNCoyFCpQnRBXV2sVVmGUY"
+          }
+        },
+        "responseFields": [
+          "address"
+        ],
+        "responseWorkflow": [
+          {
+            "kind": "setMappedField",
+            "field": "address",
+            "valueExpr": "response.data.address"
+          }
+        ]
+      }
+    ],
+    "environments": [],
+    "activeEnvironment": "default",
+    "sslPinning": null,
+    "createdAt": "2026-09-14T13:45:58.914Z",
+    "updatedAt": "2026-09-14T13:46:23.020Z"
+  },
+  {
+    "groupId": "auth",
+    "name": "Auth",
+    "baseUrl": "https://api.crypto-trading-app.example.com/v1",
+    "authType": "none",
+    "endpoints": [
+      {
+        "id": "signup",
+        "name": "Sign up",
+        "method": "POST",
+        "path": "/auth/signup",
+        "requestBody": {
+          "name": "{{name}}",
+          "email": "{{email}}",
+          "phone": "{{phone}}",
+          "password": "{{password}}"
+        },
+        "responseExample": {
+          "success": true,
+          "message": "OTP sent to your email"
+        },
+        "responseFields": [
+          "message"
+        ],
+        "responseWorkflow": [
+          {
+            "kind": "setMappedField",
+            "field": "message",
+            "valueExpr": "response.message"
+          }
+        ]
+      },
+      {
+        "id": "login",
+        "name": "Log in",
+        "method": "POST",
+        "path": "/auth/login",
+        "requestBody": {
+          "email": "{{email}}",
+          "password": "{{password}}"
+        },
+        "responseExample": {
+          "success": true,
+          "data": {
+            "token": "eyJ...",
+            "user": {
+              "id": "u_123",
+              "name": "Jane Doe",
+              "email": "jane@example.com"
+            }
+          }
+        },
+        "responseFields": [
+          "token",
+          "user"
+        ],
+        "responseWorkflow": [
+          {
+            "kind": "setMappedField",
+            "field": "token",
+            "valueExpr": "response.data.token"
+          },
+          {
+            "kind": "setMappedField",
+            "field": "user",
+            "valueExpr": "response.data.user"
+          }
+        ]
+      },
+      {
+        "id": "otp-verify",
+        "name": "Verify OTP",
+        "method": "POST",
+        "path": "/auth/otp/verify",
+        "requestBody": {
+          "email": "{{email}}",
+          "code": "{{code}}"
+        },
+        "responseExample": {
+          "success": true,
+          "data": {
+            "token": "eyJ...",
+            "user": {
+              "id": "u_123",
+              "name": "Jane Doe",
+              "email": "jane@example.com"
+            }
+          }
+        },
+        "responseFields": [
+          "token",
+          "user"
+        ],
+        "responseWorkflow": [
+          {
+            "kind": "setMappedField",
+            "field": "token",
+            "valueExpr": "response.data.token"
+          },
+          {
+            "kind": "setMappedField",
+            "field": "user",
+            "valueExpr": "response.data.user"
+          }
+        ]
+      },
+      {
+        "id": "otp-resend",
+        "name": "Resend OTP",
+        "method": "POST",
+        "path": "/auth/otp/resend",
+        "requestBody": {
+          "email": "{{email}}"
+        },
+        "responseExample": {
+          "success": true,
+          "message": "OTP sent"
+        }
+      },
+      {
+        "id": "forgot-password",
+        "name": "Forgot password",
+        "method": "POST",
+        "path": "/auth/forgot-password",
+        "requestBody": {
+          "email": "{{email}}"
+        },
+        "responseExample": {
+          "success": true,
+          "message": "Reset link sent"
+        }
+      }
+    ],
+    "environments": [],
+    "activeEnvironment": "default",
+    "sslPinning": null,
+    "createdAt": "2026-09-14T11:33:22.275Z",
+    "updatedAt": "2026-09-14T11:41:25.434Z"
+  }
+]
