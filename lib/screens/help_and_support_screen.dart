@@ -120,7 +120,7 @@ class _HelpAndSupportScreenState extends ConsumerState<HelpAndSupportScreen> {
             onTap: () async {
               try {
                 await launchUrl(
-                  Uri.parse('mailto:support@cryptotradingapp.example.com'),
+                  Uri.parse('mailto:support@coinova.example.com'),
                   mode: LaunchMode.externalApplication,
                 );
               } catch (_) {}
@@ -128,7 +128,7 @@ class _HelpAndSupportScreenState extends ConsumerState<HelpAndSupportScreen> {
             child: ListRow(
               variant: 'WithIcon',
               title: 'Email Us',
-              subtitle: 'support@cryptotradingapp.example.com',
+              subtitle: 'support@coinova.example.com',
               leadingIcon: 'email',
               iconColor: AppColors.brandIndigo,
             ),

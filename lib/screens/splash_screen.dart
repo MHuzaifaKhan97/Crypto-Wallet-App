@@ -139,7 +139,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
               duration: const Duration(milliseconds: 500),
               delay: const Duration(milliseconds: 200),
               child: Text(
-                'CRYPTO TRADING APP',
+                'COINOVA',
                 textAlign: TextAlign.center,
                 style: AppTextStyles.heading1(theme),
               ),
