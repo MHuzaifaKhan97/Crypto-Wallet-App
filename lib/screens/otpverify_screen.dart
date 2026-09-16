@@ -101,7 +101,10 @@ class _OTPVerifyScreenState extends ConsumerState<OTPVerifyScreen> {
             width: double.infinity,
             height:
                 (MediaQuery.sizeOf(context).height -
-                MediaQuery.viewPaddingOf(context).vertical),
+                EdgeInsets.fromViewPadding(
+                  View.of(context).viewPadding,
+                  View.of(context).devicePixelRatio,
+                ).vertical),
             child: Stack(
               children: [
                 Positioned(

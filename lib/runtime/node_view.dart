@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
@@ -252,19 +253,23 @@ double? _dim(Object? v) {
 /// The space a screen body is actually laid out in: the device minus the
 /// system bars.
 ///
-/// Provided once per screen by host.dart, ABOVE the body's SafeArea — the only
-/// place the real insets are still readable, because SafeArea zeroes both
-/// `padding` and `viewPadding` for everything below it. So a node deep in the
-/// tree cannot work this out for itself; it has to be told.
+/// The canvas (host.dart) provides one per screen, ABOVE the body's SafeArea,
+/// because its system bars are FAKED on a MediaQuery (fakeDeviceInsets) that
+/// the platform View knows nothing about. buildNode must be called with a
+/// context below it (host.dart's nodeContext Builder).
+///
+/// Everywhere else (the generated interpreter app, widget tests) there is no
+/// scope, and dimOf works the insets out itself — see its fallback. A plain
+/// MediaQuery read is NOT enough there: every node context in a generated app
+/// sits below the body's SafeArea(top: true), which zeroes the top of both
+/// `padding` and `viewPadding`, so it gave height − bottom inset and a
+/// full-height root overflowed by (top − bottom). route-walk --insets fails
+/// on exactly that.
 ///
 /// It measures the DEVICE, not the app: shell chrome is deliberately left in,
 /// because a tab screen already pads for the floating nav bar itself and
 /// subtracting it here too would double-count (which it did — s-profile
 /// overflowed by exactly the bar's height until this was pinned down).
-///
-/// The MediaQuery fallback keeps standalone `buildNode` callers (widget tests,
-/// goldens) working, and is exactly equivalent wherever nothing has consumed
-/// an inset yet — which is every test surface, since none of them report any.
 class ViewportScope extends InheritedWidget {
   const ViewportScope({
     super.key,
@@ -283,12 +288,26 @@ class ViewportScope extends InheritedWidget {
     // viewPadding, NOT padding: a Scaffold with extendBody:true reports its
     // own bottom bar as `padding.bottom`, and subtracting app chrome here
     // would double-count against the clearance the screen already pads for.
-    // viewPadding is the device's own insets and nothing else.
+    // Per edge, the larger of MediaQuery's viewPadding and the platform
+    // View's: below a SafeArea the MediaQuery edge reads 0 while the View
+    // still has the device's inset (the generated app); a surface that fakes
+    // insets on a MediaQuery has none on the View (widget tests). Neither can
+    // exceed the device's own bars, so max() is exact in both.
+    final view = View.of(context);
+    final EdgeInsets fromView = EdgeInsets.fromViewPadding(
+      view.viewPadding,
+      view.devicePixelRatio,
+    );
+    final EdgeInsets fromMq = MediaQuery.viewPaddingOf(context);
+    final EdgeInsets insets = EdgeInsets.fromLTRB(
+      math.max(fromMq.left, fromView.left),
+      math.max(fromMq.top, fromView.top),
+      math.max(fromMq.right, fromView.right),
+      math.max(fromMq.bottom, fromView.bottom),
+    );
     return isHeight
-        ? MediaQuery.sizeOf(context).height -
-              MediaQuery.viewPaddingOf(context).vertical
-        : MediaQuery.sizeOf(context).width -
-              MediaQuery.viewPaddingOf(context).horizontal;
+        ? MediaQuery.sizeOf(context).height - insets.vertical
+        : MediaQuery.sizeOf(context).width - insets.horizontal;
   }
 
   @override
