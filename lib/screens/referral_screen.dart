@@ -262,7 +262,7 @@ class _ReferralScreenState extends ConsumerState<ReferralScreen> {
                 children: [
                   Expanded(
                     child: Text(
-                      'https://cryptotradingapp.example.com/r/${state.referralCode}',
+                      'https://coinova.example.com/r/${state.referralCode}',
                       style: AppTextStyles.caption(theme),
                     ),
                   ),

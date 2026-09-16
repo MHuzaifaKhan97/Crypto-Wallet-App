@@ -73,7 +73,7 @@ class TermsScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'By using Crypto Trading App you agree to trade digital assets at your own risk. Cryptocurrency prices are volatile and past performance is not indicative of future results.',
+                  'By using Coinova you agree to trade digital assets at your own risk. Cryptocurrency prices are volatile and past performance is not indicative of future results.',
                   style: AppTextStyles.body(theme),
                 ),
                 const SizedBox(height: 16),

@@ -82,7 +82,7 @@
                     "id": "n-deicg58e",
                     "type": "Text",
                     "props": {
-                      "text": "CRYPTO TRADING APP",
+                      "text": "COINOVA",
                       "textStyle": "token:t-h1",
                       "align": "center",
                       "letterSpacing": 1
@@ -7152,7 +7152,7 @@
                         "type": "Text",
                         "props": {
                           "text": {
-                            "$bind": "`https://cryptotradingapp.example.com/r/${state.referralCode}`"
+                            "$bind": "`https://coinova.example.com/r/${state.referralCode}`"
                           },
                           "textStyle": "token:t-caption"
                         },
@@ -8366,7 +8366,7 @@
             "type": "ListRow",
             "props": {
               "title": "Email Us",
-              "subtitle": "support@cryptotradingapp.example.com",
+              "subtitle": "support@coinova.example.com",
               "leadingIcon": "email",
               "iconColor": "token:c-brand"
             },
@@ -8376,7 +8376,7 @@
               "onTap": [
                 {
                   "kind": "openUrl",
-                  "url": "'mailto:support@cryptotradingapp.example.com'"
+                  "url": "'mailto:support@coinova.example.com'"
                 }
               ]
             }
@@ -8436,7 +8436,7 @@
                 "id": "n-sxot94qz",
                 "type": "Text",
                 "props": {
-                  "text": "By using Crypto Trading App you agree to trade digital assets at your own risk. Cryptocurrency prices are volatile and past performance is not indicative of future results.",
+                  "text": "By using Coinova you agree to trade digital assets at your own risk. Cryptocurrency prices are volatile and past performance is not indicative of future results.",
                   "textStyle": "token:t-body"
                 }
               },
