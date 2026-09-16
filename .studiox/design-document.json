@@ -9113,7 +9113,7 @@
   "navShells": [
     {
       "id": "main",
-      "kind": "bottomTabs",
+      "kind": "floatingTabs",
       "tabs": [
         {
           "routeId": "r-home",

@@ -313,28 +313,119 @@ class _Shell extends StatelessWidget {
   const _Shell({required this.navigationShell});
   @override
   Widget build(BuildContext context) => Scaffold(
+    extendBody: true,
     body: navigationShell,
-    bottomNavigationBar: NavigationBar(
+    bottomNavigationBar: _FloatingNavBar(
       selectedIndex: navigationShell.currentIndex,
-      onDestinationSelected: navigationShell.goBranch,
-      destinations: const [
-        NavigationDestination(icon: Icon(Icons.home_outlined), label: 'Home'),
-        NavigationDestination(
+      onSelected: navigationShell.goBranch,
+      items: const <_FloatingNavItem>[
+        _FloatingNavItem(icon: Icon(Icons.home_outlined), label: 'Home'),
+        _FloatingNavItem(
           icon: Icon(Icons.account_balance_wallet_outlined),
           label: 'Portfolio',
         ),
-        NavigationDestination(icon: Icon(Icons.bar_chart), label: 'Market'),
-        NavigationDestination(
-          icon: Icon(Icons.card_giftcard),
-          label: 'Rewards',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.person_outline),
-          label: 'Profile',
-        ),
+        _FloatingNavItem(icon: Icon(Icons.bar_chart), label: 'Market'),
+        _FloatingNavItem(icon: Icon(Icons.card_giftcard), label: 'Rewards'),
+        _FloatingNavItem(icon: Icon(Icons.person_outline), label: 'Profile'),
       ],
     ),
   );
+}
+
+class _FloatingNavItem {
+  final Icon icon;
+  final String label;
+  const _FloatingNavItem({required this.icon, required this.label});
+}
+
+class _FloatingNavBar extends StatelessWidget {
+  final int selectedIndex;
+  final ValueChanged<int> onSelected;
+  final List<_FloatingNavItem> items;
+  const _FloatingNavBar({
+    required this.selectedIndex,
+    required this.onSelected,
+    required this.items,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final ColorScheme scheme = Theme.of(context).colorScheme;
+    return SafeArea(
+      top: false,
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+        padding: const EdgeInsets.all(6),
+        decoration: BoxDecoration(
+          color: scheme.surface,
+          borderRadius: BorderRadius.circular(32),
+          boxShadow: const <BoxShadow>[
+            BoxShadow(
+              color: Color(0x1F000000),
+              blurRadius: 24,
+              offset: Offset(0, 8),
+            ),
+          ],
+        ),
+        child: Row(
+          children: <Widget>[
+            for (int i = 0; i < items.length; i++)
+              Expanded(
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(24),
+                  onTap: () => onSelected(i),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 180),
+                    curve: Curves.easeOut,
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8,
+                      horizontal: 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: i == selectedIndex
+                          ? scheme.secondaryContainer
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        IconTheme(
+                          data: IconThemeData(
+                            size: 22,
+                            color: i == selectedIndex
+                                ? scheme.onSecondaryContainer
+                                : scheme.onSurfaceVariant,
+                          ),
+                          child: items[i].icon,
+                        ),
+                        const SizedBox(height: 3),
+                        Text(
+                          items[i].label,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 10,
+                            height: 1.1,
+                            fontWeight: i == selectedIndex
+                                ? FontWeight.w600
+                                : FontWeight.w400,
+                            color: i == selectedIndex
+                                ? scheme.onSecondaryContainer
+                                : scheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class _AppScrollBehavior extends MaterialScrollBehavior {
